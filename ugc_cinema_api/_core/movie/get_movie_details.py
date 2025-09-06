@@ -89,7 +89,8 @@ class MoviePage:
 		print(req)
 		try:
 			data = req.json()
-			return data['videos'][1]['src']
+			print(data)
+			return data['videos'][0]['src']
 		except JSONDecodeError as err:
 			return None
 		
@@ -122,4 +123,4 @@ class MoviePage:
 		return self.director
 
 	def _get_actors(self) -> list:
-		return self.actors
+		return self.actors	
