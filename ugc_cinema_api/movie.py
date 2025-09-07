@@ -1,10 +1,9 @@
-from ugc_cinema_api._core.movie.get_movie_details import MoviePage
+from ugc_cinema_api._core.movie import MoviePage
 import json
 
 
 # Interface
 class Movie:
-
 
 	def __init__(self, slug: str):
 		self.page = MoviePage(slug)
@@ -27,7 +26,6 @@ class Movie:
 	def __repr__(self):
 		attrs = self.__dict__
 		del attrs['page']
-
 		return json.dumps(attrs, indent=4)
 
 	def get_id(self) -> str: return self.page._get_id()
@@ -44,3 +42,5 @@ class Movie:
 	def get_director(self) -> str: return self.page._get_director()
 	def get_actors(self) -> list: return self.page._get_actors()
 	
+	
+
