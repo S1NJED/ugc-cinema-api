@@ -86,11 +86,9 @@ class MoviePage:
 			"filmId": self._get_id()
 		}
 		req = fetch(url, method="GET",headers={}, query_params=params)
-		print(req)
 		try:
 			data = req.json()
-			print(data)
-			return data['videos'][0]['src']
+			return data['videos'][1]['src']
 		except JSONDecodeError as err:
 			return None
 		
