@@ -14,6 +14,7 @@ class MoviePage:
 
 	def __init__(self, slug: str):
 		self.slug = slug
+		self.id = self._get_id()
 		self.dom = fetch(create_url(slug), method="GET")
 		self.soup = BeautifulSoup(self.dom.text, "html.parser")
 		self.rating_soup = self._init_rating_soup()
@@ -24,6 +25,7 @@ class MoviePage:
 		self.release_date = None
 		self.actors = []
 		self.description = None
+		self.seances = self._fetch_seances()
 
 		self._extract_movie_informations()
 
@@ -91,10 +93,6 @@ class MoviePage:
 			return data['videos'][1]['src']
 		except JSONDecodeError as err:
 			return None
-		
-	def _get_trailer(self) -> str:
-		return self.trailer
-
 
 	# one fn because several info in same str
 	def _extract_movie_informations(self):
@@ -107,6 +105,42 @@ class MoviePage:
 		self.director = info[3].removeprefix("De ")
 		self.actors = info[4].removeprefix("Avec ").split(', ')
 
+	def _fetch_seances(self, date: str):
+		'''
+		{
+			regions: [
+				{
+					"name": Paris,
+					id: 1,
+					cinemas: [
+						{
+							name: X,
+							id: X,
+							seances: [
+								date,
+
+							]
+						}
+					]
+				}
+			]
+		}
+		'''
+		# To get the next dates of the movief
+		# https://www.ugc.fr/showingsFilmAjaxAction!getDaysByFilm.action?filmId=3531 
+
+		# To get the seances from a day
+		url = f"https://www.ugc.fr/showingsFilmAjaxAction!getShowingsByFilm.action?filmId=17141&day=2025-09-13&regionId=1&defaultRegionId=1&__multiselect_versions="
+		query_params = {
+			"filmId": self.id,
+			"day": "",
+			"regionId": self
+		}
+
+		return []
+
+	def _get_trailer(self) -> str:
+		return self.trailer
 
 	def _get_genres(self) -> list:
 		return self.genres
@@ -122,3 +156,6 @@ class MoviePage:
 
 	def _get_actors(self) -> list:
 		return self.actors	
+
+	def _get_seances(self) -> list:
+		return self.seances
